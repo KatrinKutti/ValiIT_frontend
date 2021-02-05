@@ -1,19 +1,27 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    First name:<input v-model="customer.firstName" placeholder="First name"><br>
-    Last name:<input v-model="customer.lastName" placeholder="Last name"><br>
-    Address:<input v-model="customer.address" placeholder="Address"><br>
-    Username:<input v-model="customer.userName" placeholder="Username"><br>
-    Password:<input v-model="customer.pswrd" placeholder="Password"><br>
-    <button v-on:click="saveInHtml()">Submit</button>
+    First name:<input v-model="firstName" placeholder="First name"><br>
+    Last name:<input v-model="lastName" placeholder="Last name"><br>
+    Address:<input v-model="address" placeholder="Address"><br>
+    Username:<input v-model="userName" placeholder="Username"><br>
+    Password:<input v-model="password" placeholder="Password"><br>
+    <button v-on:click="saveInHtml()">Submit</button><br>
+    <b>{{answer}}</b>
   </div>
 </template>
 
 <script>
 let saveInJs = function () {
-  this.$http.post('http://localhost:8080/Katrin/registerCustomer', this.customer);
-  alert('New customer registered!');
+  this.$http.post('http://localhost:8080/Katrin/registerCustomer', {},{
+    params: {
+      firstName: this.firstName,
+      lastName: this.lastName,
+      address: this.address,
+      userName: this.userName,
+      password: this.password
+    }})
+      .then(response => this.answer = response.data)
+      .catch(response => console.log(response.data))
 }
 
 export default {
@@ -21,7 +29,12 @@ export default {
   components: {},
   data: function () {
     return {
-     customer:{}
+      firstName: '',
+      lastName: '',
+      address: '',
+      userName: '',
+      password: '',
+      answer: ''
     }
   },
   methods: {
